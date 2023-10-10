@@ -7,6 +7,7 @@ import 'package:movies_app/core/network/api_constance.dart';
 import 'package:movies_app/core/utils/enums.dart';
 import 'package:movies_app/features/movies/presentation/controllers/movies_bloc.dart';
 import 'package:movies_app/features/movies/presentation/controllers/movies_state.dart';
+import 'package:movies_app/features/movies/presentation/screens/movie_detail_screen.dart';
 import 'package:shimmer/shimmer.dart';
 
 class NowPlayingMoviesComponent extends StatelessWidget {
@@ -15,7 +16,8 @@ class NowPlayingMoviesComponent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<MoviesBloc, MoviesState>(
-      buildWhen: (previous , current) => previous.nowPlayingMoviesState != current.nowPlayingMoviesState,
+      buildWhen: (previous, current) =>
+          previous.nowPlayingMoviesState != current.nowPlayingMoviesState,
       builder: (context, state) {
         switch (state.nowPlayingMoviesState) {
           case RequestState.loading:
@@ -45,7 +47,13 @@ class NowPlayingMoviesComponent extends StatelessWidget {
                     return GestureDetector(
                       key: const Key('openMovieMinimalDetail'),
                       onTap: () {
-                        /// TODO : NAVIGATE TO MOVIE DETAILS
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                MovieDetailScreen(id: item.id),
+                          ),
+                        );
                       },
                       child: Stack(
                         children: [
@@ -122,7 +130,9 @@ class NowPlayingMoviesComponent extends StatelessWidget {
               ),
             );
           case RequestState.error:
-            return Center(child: Text(state.nowPlayingMoviesMessage),);
+            return Center(
+              child: Text(state.nowPlayingMoviesMessage),
+            );
         }
       },
     );

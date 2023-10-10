@@ -22,7 +22,7 @@ class MovieDetailsModel extends MovieDetails {
       runTime: json['runtime'],
       relaseDate: json['release_date'],
       title: json['title'],
-      voteAverage: json['vote_average'],
+      voteAverage: json['vote_average'].toDouble(),
     );
   }
 }

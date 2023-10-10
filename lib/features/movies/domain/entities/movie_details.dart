@@ -4,13 +4,13 @@ import 'geners.dart';
 
 class MovieDetails extends Equatable {
   final String backdropPath;
-  final List<Genres> geners; 
+  final List<Genres> geners;
   final int id;
   final String overView;
   final int runTime;
   final String relaseDate;
   final String title;
-  final int voteAverage;
+  final double voteAverage;
 
   const MovieDetails({
     required this.backdropPath,

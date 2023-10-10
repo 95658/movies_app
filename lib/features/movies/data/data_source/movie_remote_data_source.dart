@@ -3,7 +3,9 @@ import 'package:movies_app/core/error/exception.dart';
 import 'package:movies_app/core/network/api_constance.dart';
 import 'package:movies_app/core/network/error_message_model.dart';
 import 'package:movies_app/features/movies/data/models/movie_details_model.dart';
+import 'package:movies_app/features/movies/data/models/recommendation_model.dart';
 import 'package:movies_app/features/movies/domain/usecases/get_movie_details.dart';
+import 'package:movies_app/features/movies/domain/usecases/get_recommendation_usecase.dart';
 import '../models/movie_model.dart';
 
 abstract class BaseMovieRemoteDataSource {
@@ -11,6 +13,7 @@ abstract class BaseMovieRemoteDataSource {
   Future<List<MovieModel>> getPopularMovies();
   Future<List<MovieModel>> getTopRatedMovies();
   Future<MovieDetailsModel> getMovieDetails( MovieDetailsParameters parameters);
+  Future<List<RecommendationModel>> getRecommendation( RecommendationParameters parameters);
 }
 
 class MovieRemoteDataSource extends BaseMovieRemoteDataSource {
@@ -18,7 +21,6 @@ class MovieRemoteDataSource extends BaseMovieRemoteDataSource {
   Future<List<MovieModel>> getNowPlayingMovies() async {
     final response = await Dio().get(
         ApiConstance.nowPlayingMoviesPath);
-    print(response);
     if (response.statusCode == 200) {
       return List<MovieModel>.from((response.data['results'] as List).map((e) =>
           MovieModel.fromJson(e)));
@@ -67,4 +69,19 @@ class MovieRemoteDataSource extends BaseMovieRemoteDataSource {
           errorMessageModel: ErrorMessageModel.fromJson(response.data));
     }
   }
+
+  @override
+  Future<List<RecommendationModel>> getRecommendation(RecommendationParameters parameters)async {
+    final response = await Dio().get(ApiConstance.recommendationPath(parameters.id));
+
+    if (response.statusCode == 200) {
+      return List<RecommendationModel>.from((response.data['results'] as List).map((e) =>
+          RecommendationModel.fromJson(e)));
+    } else {
+      throw ServerException(
+          errorMessageModel: ErrorMessageModel.fromJson(response.data));
+    }
+  }
+
+
 }
